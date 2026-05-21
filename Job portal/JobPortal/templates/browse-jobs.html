@@ -1,0 +1,69 @@
+{% extends 'master/base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <h1>Browse Jobs</h1>
+
+  {% if request.user.user_type == 'Recruiters' %}
+    <a href="{% url 'post_job_view' %}" class="btn btn-success">Post Job</a>
+    {% endif %}
+    {% if request.user.user_type != 'Recruiters' %}
+      <form class="d-flex mt-3" method="GET" action="{% url 'browse_job_view' %}">
+        <input class="form-control me-2" type="text" name="search_query" placeholder="e.g. Title, Company Name, Category" aria-label="Search" />
+        <button class="btn btn-outline-success me-2" type="submit">Search</button>
+        <a href="{% url 'browse_job_view' %}" class="btn btn-outline-danger">Clear</a>
+      </form>
+    {% endif %}
+
+  {% for job in job_data %}
+    <div class="card shadow-sm border-0 mb-3 mt-2">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <!-- Company Logo -->
+          <div class="flex-shrink-0 me-3">
+            <img src="{{ job.posted_by.logo.url }}" alt="{{ job.posted_by.company_name }}" class="rounded" style="width: 80px; height: 80px; object-fit: cover;" />
+          </div>
+
+          <!-- Job Info -->
+          <div class="flex-grow-1">
+            <h5 class="mb-1">{{ job.title }}</h5>
+
+            <p class="mb-1 text-muted">
+              <strong>Company:</strong>
+              {{ job.posted_by.company_name }}
+            </p>
+
+            <p class="mb-1">
+              <span class="badge bg-primary">{{ job.category.name }}</span>
+            </p>
+
+            <p class="mb-1">{{ job.skills_set }}</p>
+            <p class="mb-1">Salary: {{ job.salary }}</p>
+
+            <p class="mb-0 text-danger">
+              <strong>Deadline:</strong>
+              {{ job.deadline }}
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="text-end">
+            {% if request.user.user_type == 'Recruiters' %}
+              <a href="{% url 'update_job_view' job.id %}" class="btn btn-sm btn-warning">Edit</a>
+              <a href="{% url 'delete_job_view' job.id %}" class="btn btn-sm btn-danger">Delete</a>
+              <a href="{% url 'candidate_list_view' job.id %}" class="btn btn-sm btn-success">Candidate List</a>
+            {% endif %}
+            <a href="" class="btn btn-sm btn-info">View</a>
+            {% if request.user.user_type != 'Recruiters' %}
+              <a href="{% url 'apply_job_view' job.id %}" class="btn btn-sm btn-success">Apply</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'master/base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <h1>My appllicationslist</h1>
+
+  {% for job in application_list %}
+    <div class="card shadow-sm border-0 mb-3 mt-2">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <!-- Company Logo -->
+          <div class="flex-shrink-0 me-3">
+            <img src="{{ job.applied_job.posted_by.logo.url }}" alt="{{ job.applied_job.posted_by.company_name }}" class="rounded" style="width: 80px; height: 80px; object-fit: cover;" />
+          </div>
+
+          <!-- Job Info -->
+          <div class="flex-grow-1">
+            <h5 class="mb-1">{{ job.applied_job.title }}</h5>
+
+            <p class="mb-1 text-muted">
+              <strong>Company:</strong>
+              {{ job.applied_job.posted_by.company_name }}
+            </p>
+
+            <p class="mb-1">
+              <span class="badge bg-primary">{{ job.applied_job.category.name }}</span>
+            </p>
+            <p class="mb-1">{{ job.applied_job.skills_set }}</p>
+            <p class="mb-1">Salary: {{ job.applied_job.salary }}</p>
+
+            <p class="mb-0 text-danger">
+              <strong>Deadline:</strong>
+              {{ job.applied_job.deadline }}
+            </p>
+            <p class="mb-0 text-success">
+              <strong>Apply Date:</strong>
+              {{ job.applied_at }}
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="text-end">
+            <a href="" class="btn btn-sm btn-info">View</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

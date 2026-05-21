@@ -1,0 +1,25 @@
+{% extends 'master/base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <h1>Profile-page</h1>
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Name: {{request.user.display_name}} </h5>
+      <p class="card-text">Email: {{request.user.email}} </p>
+      <p class="card-text">User Type: {{request.user.user_type}} </p>
+
+      {% if request.user.user_type == 'Recruiters' %}
+      <p>Company Name: {{request.user.recruiter_profile.company_name}} </p>
+      {% else %}
+      <p>SKill Sets: {{request.user.jobseeker_profile.skills_set}} </p>
+
+      {% endif %}
+
+      <a href="{% url 'update_profile' %}" class="btn btn-primary">Update Profile</a>
+    </div>
+  </div>
+{% endblock %}
